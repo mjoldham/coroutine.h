@@ -3,10 +3,11 @@
 Basic coroutine functionality implemented with C macros in a dinky single header file!
 
 
+
+
 The basic steps are:
 
  	1) Define a function using 'COROUTINE\_DEFINE' and 'COROUTINE\_ENDDEF'
-
  	   (and optionally declare it somewhere else using 'COROUTINE\_DECLARE').
 
  	2) Pass the pointer to this function to a constructed 'Coroutine'.
@@ -16,9 +17,12 @@ The basic steps are:
  	4) If 'next' returns -1 the 'Coroutine' is finished, use 'reset'!
  
 
-NB: Use the sized variables ('i64', etc.) to store mutable, persistent info.
 
-    Use #defines for constant, persistent info (e.g. loop counts).
+
+NB: Use the sized variables ('i64', etc.) to store mutable, persistent info.
+    Use #defines for constant, persistent info (e.g. loop counts).
+
+
 
 
 Below is an example of how to get coroutine-ing!
@@ -27,146 +31,78 @@ Below is an example of how to get coroutine-ing!
 
 ```
 
-\#include <stdio.h>
+#include <stdio.h>
+#include "coroutine.h"
 
-\#include "coroutine.h"
+#define STEP_THRU
+#define TEST_BREAK 1
 
-
-
-\#define STEP\_THRU
-
-\#define TEST\_BREAK 1
-
-
-
-COROUTINE\_DEFINE(test)
-
+COROUTINE_DEFINE(test)
 {
-
-\#define count 10
-
- 	for (c->i64 = 0; c->i64 < count; c->i64++)
-
+#define count 10
+	for (c->i64 = 0; c->i64 < count; c->i64++)
  	{
-
- 		float t = (float)c->i64 / (count - 1);
-
- 		printf("t:%f\\n", t);
-
- 		yield\_return;
-
+		float t = (float)c->i64 / (count - 1);
+ 		printf("t:%f\n", t);
+ 		yield_return;
  	}
 
+ 	printf("First part done!\n");
+ 	yield_return;
 
-
- 	printf("First part done!\\n");
-
- 	yield\_return;
-
-
-
-\#define counti 5
-
-\#define countj 3
-
-\#define countk 4
+#define counti 5
+#define countj 3
+#define countk 4
 
  	for (c->i16 = 0; c->i16 < counti; c->i16++)
-
  	{
-
- 		printf("\\ni:%d\\n", c->i16);
-
+ 		printf("\ni:%d\n", c->i16);
  		for (c->j16 = 0; c->j16 < countj; c->j16++)
-
  		{
-
- 			printf("\\n\\tj:%d\\n", c->j16);
-
+ 			printf("\n\tj:%d\n", c->j16);
  			for (c->k16 = 0; c->k16 < countk; c->k16++)
-
  			{
-
- 				printf("\\t\\tk:%d\\n", c->k16);
-
- 				yield\_return;
-
+ 				printf("\t\tk:%d\n", c->k16);
+ 				yield_return;
  			}
-
  		}
-
  	}
 
-
-
- 	if (TEST\_BREAK)
-
+ 	if (TEST_BREAK)
  	{
-
- 		printf("I'm tired of this, end early!\\n");
-
- 		yield\_break;
-
+ 		printf("I'm tired of this, end early!\n");
+ 		yield_break;
  	}
 
+ 	printf("Second part done!\n");
+ 	yield_return;
 
-
- 	printf("Second part done!\\n");
-
- 	yield\_return;
-
-
-
- 	printf("Guess that's it!\\n");
+ 	printf("Guess that's it!\n");
 
 }
-
-COROUTINE\_ENDDEF
-
-
+COROUTINE_ENDDEF
 
 int main()
-
 {
-
- 	struct Coroutine testing = { .coroutine = \&test };
-
+ 	struct Coroutine testing = { .coroutine = &test };
  	int n = 0;
 
-
-
-\#ifdef STEP\_THRU
-
+#ifdef STEP_THRU
  	while (getchar())
-
-\#else
-
+#else
  	while (1)
-
-\#endif
-
+#endif
  	{
-
- 		int line = next(\&testing);
-
- 		printf("line: %d, count: %d\\n", line, n++);
-
-
+ 		int line = next(&testing);
+ 		printf("line: %d, count: %d\n", line, n++);
 
  		if (line == -1)
-
  		{
-
  			break;
-
  		}
-
  	}
 
-
-
  	return 0;
-
 }
 
 ```
