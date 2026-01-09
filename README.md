@@ -1,7 +1,7 @@
 # coroutine.h
 
 Basic coroutine functionality implemented with C macros in a dinky single header file!
-
+Sort of like a very flexible [Duff's device](https://en.wikipedia.org/wiki/Duff%27s_device).
 
 
 
