@@ -1,7 +1,6 @@
 # coroutine.h
 
-Basic coroutine functionality implemented with C macros in a dinky single header file.
-
+Basic coroutine functionality implemented with C macros in a dinky single header file!
 
 
 The basic steps are:
@@ -15,7 +14,6 @@ The basic steps are:
  	3) Call 'next' on this 'Coroutine' to step through it.
 
  	4) If 'next' returns -1 the 'Coroutine' is finished, use 'reset'!
-
  
 
 NB: Use the sized variables ('i64', etc.) to store mutable, persistent info.
@@ -23,10 +21,11 @@ NB: Use the sized variables ('i64', etc.) to store mutable, persistent info.
     Use #defines for constant, persistent info (e.g. loop counts).
 
 
-
 Below is an example of how to get coroutine-ing!
 
 
+
+```
 
 \#include <stdio.h>
 
@@ -169,4 +168,6 @@ int main()
  	return 0;
 
 }
+
+```
 
