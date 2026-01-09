@@ -6,11 +6,11 @@
 extern "C" {
 #endif
 
-// Coroutine data structure and functions
+// Declares coroutine function with given name.
 #define COROUTINE_DECLARE(func_name) int func_name(struct Coroutine *c)
 struct Coroutine
 {
-	uint64_t line;
+	uint64_t line; // The line of code to resume from, -1 means it's done.
 	union
 	{
 		uint64_t i64; // max: 1.84e19 - 1
@@ -28,19 +28,20 @@ struct Coroutine
 		};
 	};
 
+	// The function used by this coroutine.
 	COROUTINE_DECLARE((*coroutine));
 };
 
-// Go to next yield statement. Returns -1 if coroutine finished.
+// Goes to next yield statement. Returns -1 if coroutine is finished.
 inline int next(struct Coroutine *c) { return c->coroutine(c); }
 
-// Reset coroutine to the start.
+// Resets coroutine to the start of its function.
 inline void reset(struct Coroutine *c) { c->line = c->i64 = 0; }
 
-// Initiates definition of coroutine, followed by opening braces.
+// Initiates definition of coroutine, insert opening braces after this!
 #define COROUTINE_DEFINE(func_name) COROUTINE_DECLARE(func_name) \
 { switch (c->line) { case 0:
-// Ends definition of coroutine, placed after closing braces.
+// Ends definition of coroutine, place this after closing braces!
 #define COROUTINE_ENDDEF default: return c->line = -1; } }
 
 // Pauses coroutine, returns to calling function.

@@ -1,20 +1,20 @@
 # coroutine.h
 
 Basic coroutine functionality implemented with C macros in a dinky single header file!
-Sort of like a very flexible [Duff's device](https://en.wikipedia.org/wiki/Duff%27s_device).
+Sort of like a flexible [Duff's device](https://en.wikipedia.org/wiki/Duff%27s_device).
 
 
 
 The basic steps are:
 
- 	1) Define a function using 'COROUTINE\_DEFINE' and 'COROUTINE\_ENDDEF'
- 	   (and optionally declare it somewhere else using 'COROUTINE\_DECLARE').
+ 	1) Define a function using 'COROUTINE_DEFINE' and 'COROUTINE_ENDDEF'
+ 	   (and optionally declare it somewhere else using 'COROUTINE_DECLARE').
 
  	2) Pass the pointer to this function to a constructed 'Coroutine'.
 
  	3) Call 'next' on this 'Coroutine' to step through it.
 
- 	4) If 'next' returns -1 the 'Coroutine' is finished, use 'reset'!
+ 	4) If 'next' returns -1 the 'Coroutine' is finished, use 'reset' to start over.
  
 
 
@@ -37,6 +37,10 @@ Below is an example of how to get coroutine-ing!
 #define STEP_THRU
 #define TEST_BREAK 1
 
+// You can place this in a header file...
+COROUTINE_DECLARE(test);
+
+// ... and put this in a source file.
 COROUTINE_DEFINE(test)
 {
 #define count 10
