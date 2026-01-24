@@ -45,7 +45,7 @@ inline void reset(struct Coroutine *c) { c->line = c->i64 = 0; }
 #define COROUTINE_ENDDEF default: return c->line = -1; } }
 
 // Pauses coroutine, returns to calling function.
-#define yield_return return c->line = __LINE__; case __LINE__:
+#define yield_return return c->line = __COUNTER__; case __COUNTER__:
 // Ends coroutine early, returns to calling function.
 #define yield_break return c->line = -1;
 
